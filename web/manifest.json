@@ -1,6 +1,6 @@
 {
-    "name": "flttter_sqlite_app",
-    "short_name": "flttter_sqlite_app",
+    "name": "flutter_sqlite_app",
+    "short_name": "flutter_sqlite_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

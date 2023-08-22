@@ -1,4 +1,4 @@
-# flttter_sqlite_app
+# flutter_sqlite_app
 
 A new Flutter project.
 

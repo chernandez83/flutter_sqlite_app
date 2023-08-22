@@ -9,7 +9,7 @@ class DB {
 
   Future<Database> open() async {
     String path = join(await getDatabasesPath(), name);
-    openDatabase(
+    return openDatabase(
       path,
       version: version,
       readOnly: false,
@@ -21,7 +21,7 @@ class DB {
 }
 
 onConfigure(Database db) {
-  db.execute('PGAGMA foreign_keys = ON');
+  db.execute('PRAGMA foreign_keys = ON');
 }
 
 onCreate(Database db, int version) async {

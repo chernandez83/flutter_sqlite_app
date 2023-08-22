@@ -1,23 +1,23 @@
 import 'package:flutter_sqlite_app/database/crud.dart';
 import 'package:flutter_sqlite_app/database/db_table.dart';
 
-class Page extends CRUD {
+class DiaryPage extends CRUD {
   int? id;
   String date;
   String title;
   String content;
   String diaryId;
 
-  Page({this.id, this.date='', this.title='', this.content='', this.diaryId=''}):super(DBTable.PAGE);
+  DiaryPage({this.id, this.date='', this.title='', this.content='', this.diaryId=''}):super(DBTable.PAGE);
 
-  factory Page.toObject(Map<dynamic, dynamic> data) {
-    return (data != null) ? Page(
+  factory DiaryPage.toObject(Map<dynamic, dynamic> data) {
+    return (data != null) ? DiaryPage(
       id: data['id'],
       date: data['date'],
       title: data['title'],
       content: data['content'],
       diaryId: data['diaryId']
-    ) : Page();
+    ) : DiaryPage();
   }
 
   Map<String, dynamic> toMap() {
@@ -31,6 +31,6 @@ class Page extends CRUD {
   }
 
   getList(parsed) {
-    return (parsed as List).map((map) => Page.toObject(map)).toList();
+    return (parsed as List).map((map) => DiaryPage.toObject(map)).toList();
   }
 }
