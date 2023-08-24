@@ -27,4 +27,13 @@ class Diary extends  CRUD {
   getList(parsed) {
     return (parsed as List).map((map) => Diary.toObject(map)).toList();
   }
+
+  save() async {
+    id = await insert(toMap());
+    return (id! > 0 ? this : null);
+  }
+
+  checkEnterCode(String code) {
+    return (code == enterCode ? this : null);
+  }
 }

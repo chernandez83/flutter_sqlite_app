@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sqlite_app/modelo/diary.dart';
+import 'package:flutter_sqlite_app/pages/home_page.dart';
 
 class LockScreen extends StatefulWidget {
   List<Diary> diaries;
@@ -83,9 +84,25 @@ class LockScreenState extends State<LockScreen> {
     );
   }
 
-  save() {}
+  save() async {
+    Diary? diary = await Diary(type: ctrlType.text, enterCode: ctrlCode.text).save();
+    if(diary != null) {
+      goHome(diary);
+    }
+  }
 
-  unlock() {}
+  unlock() async {
+    Diary? diary = await dropDownValue!.checkEnterCode(ctrlCode.text);
+    if(diary != null) {
+      goHome(diary);
+    }
+  }
+
+  goHome(Diary diary) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => MyHomePage(diary: diary),
+    ));
+  }
 
   onChangedDiary(Diary? diary) {
     setState(() {
