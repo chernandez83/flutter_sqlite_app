@@ -9,7 +9,7 @@ abstract class CRUD {
     return await DB().open();
   }
 
-  query(String sql, List<dynamic> args) async {
+  query(String sql, {List<dynamic>? args}) async {
     final db = await database;
     return await db.rawQuery(sql, args);
   }

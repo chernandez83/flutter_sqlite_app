@@ -33,7 +33,16 @@ class Diary extends  CRUD {
     return (id! > 0 ? this : null);
   }
 
-  checkEnterCode(String code) {
+  /*checkEnterCode(String code) {
     return (code == enterCode ? this : null);
+  }*/
+  checkEnterCode(String code) async {
+    var result = await query('SELECT * FROM ${DBTable.DIARY} WHERE id=? AND enterCode=?', args: [id, code]);
+    return Diary.toObject(result[0]);
+  }
+
+   Future<List<Diary>> getDiaries() async {
+    var diaries = await query('SELECT * FROM ${DBTable.DIARY}');
+    return getList(diaries);
   }
 }

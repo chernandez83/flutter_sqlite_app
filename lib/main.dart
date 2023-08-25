@@ -22,9 +22,19 @@ class MyApp extends StatelessWidget {
       ),
       home: SafeArea(
         child: Scaffold(
-          body: LockScreen(diaries: diaries,),
+          body: Center(
+            child: FutureBuilder<List<Diary>>(
+              future: Diary().getDiaries(),
+              initialData: [],
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return (snapshot.connectionState == ConnectionState.done) ?
+                LockScreen(diaries: snapshot.data) :
+                CircularProgressIndicator();
+              },
+            ),
+          ),
         ),
-      ), //const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
