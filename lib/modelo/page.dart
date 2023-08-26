@@ -1,6 +1,7 @@
 import 'package:flutter_sqlite_app/database/crud.dart';
 import 'package:flutter_sqlite_app/database/db_table.dart';
 import 'package:flutter_sqlite_app/modelo/diary.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DiaryPage extends CRUD {
   int? id;
@@ -11,7 +12,7 @@ class DiaryPage extends CRUD {
 
   DiaryPage({this.id, this.date='', this.title='', this.content='', this.diaryId}):super(DBTable.PAGE);
 
-  factory DiaryPage.toObject(Map<dynamic, dynamic> data) {
+  factory DiaryPage.toObject(Map<dynamic, dynamic>? data) {
     return (data != null) ? DiaryPage(
       id: data['id'],
       date: data['date'],
@@ -43,5 +44,18 @@ class DiaryPage extends CRUD {
   saveOrUpdate() async {
     id = (id != null) ? await update(toMap()) : await insert(toMap());
     return (id! > 0) ? this : null;
+  }
+
+  insertPages(List<DiaryPage> pages) async {
+    final db = await database;
+
+    db.transaction((dbTxn) async {
+      Batch batch = dbTxn.batch();
+      for(DiaryPage page in pages) {
+        batch.insert(table, page.toMap());
+      }
+      var result = await batch.commit(continueOnError: false, noResult: false);
+      print('Resultado: ${result}');
+    });
   }
 }

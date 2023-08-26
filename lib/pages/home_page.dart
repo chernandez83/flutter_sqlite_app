@@ -25,6 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
           'Bienvenid@ a tu diarrio ${widget.diary.type}',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: [
+          IconButton(
+            onPressed: addPages,
+            icon: const Icon(Icons.playlist_add)
+          ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<List<DiaryPage>> (
@@ -51,7 +57,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView.builder(
       itemCount: pages.length,
       itemBuilder: (BuildContext context, int index) {
-        return PageCard(addPage, page: pages[index]);
+        DiaryPage page = pages[index];
+        return Dismissible(
+          key: ObjectKey(page),
+          onDismissed: (DismissDirection direction) {
+            page.delete(page.id);
+            setState(() {
+              pages.remove(page);
+            });
+          },
+          child: PageCard(addPage, page: page),
+        ) ;
       }
     );
   }
@@ -68,5 +84,48 @@ class _MyHomePageState extends State<MyHomePage> {
         pages.add(page);
       });
     }
+  }
+
+  addPages() {
+    List<DiaryPage> pages= [
+      DiaryPage(
+        id:10,
+        date: "26-08-2023",
+        title: "Página 10",
+        content: "Página 10",
+        diaryId: 1
+      ),
+      DiaryPage(
+        id:11,
+        date: "26-08-2023",
+        title: "Página 11",
+        content: "Página 11",
+        diaryId: 1
+      ),
+      DiaryPage(
+        id:12,
+        date: "26-08-2023",
+        title: "Página 12",
+        content: "Página 12",
+        diaryId: 1
+      ),
+      /*DiaryPage(
+        id:12,
+        date: "26-08-2023",
+        title: "Página 12",
+        content: "Página 12",
+        diaryId: 1
+      ),*/
+      DiaryPage(
+        id:13,
+        date: "26-08-2023",
+        title: "Página 13",
+        content: "Página 13",
+        diaryId: 1
+      )
+    ];
+    setState(() {
+      DiaryPage().insertPages(pages);
+    });
   }
 }
