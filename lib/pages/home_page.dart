@@ -16,12 +16,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<DiaryPage> pages = [];
 
-  void goForm() {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) => FormPage(diary: widget.diary),
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,21 +26,47 @@ class _MyHomePageState extends State<MyHomePage> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
-      body: getListView(),
+      body: Center(
+        child: FutureBuilder<List<DiaryPage>> (
+          future: DiaryPage().getPages(widget.diary.id),
+          initialData: [],
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //pages = snapshot.data;
+            return (snapshot.connectionState == ConnectionState.done) ?
+              getListView(snapshot.data) :
+              const CircularProgressIndicator();
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: goForm,
-        tooltip: 'Increment',
+        tooltip: 'Agregar',
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  getListView() {
+  getListView(List<DiaryPage> pages) {
+    this.pages = pages;
     return ListView.builder(
       itemCount: pages.length,
       itemBuilder: (BuildContext context, int index) {
-        return PageCard(page: pages[index]);
+        return PageCard(addPage, page: pages[index]);
       }
     );
+  }
+
+  void goForm() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => FormPage(addPage, diary: widget.diary),
+    ));
+  }
+
+  addPage(DiaryPage? page) {
+    if(page != null) {
+      setState(() {
+        pages.add(page);
+      });
+    }
   }
 }

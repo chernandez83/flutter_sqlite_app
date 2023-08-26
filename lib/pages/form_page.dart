@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sqlite_app/modelo/diary.dart';
 import 'package:flutter_sqlite_app/modelo/page.dart';
 
+typedef VoidCallBackParam = Function(DiaryPage? page);
+
 class FormPage extends StatefulWidget {
-  Diary diary;
+  Diary? diary;
   DiaryPage? page;
-  FormPage({required this.diary, this.page, super.key});
+  VoidCallBackParam voidCallBackParam;
+  FormPage(this.voidCallBackParam, {this.diary, this.page, super.key});
 
   @override
-  State<StatefulWidget> createState() => FormPageState(page);
+  State<StatefulWidget> createState() => FormPageState(page: page);
 
 }
 
 class FormPageState extends State<FormPage> {
   DiaryPage? page;
-  FormPageState(this.page);
+  FormPageState({this.page});
 
   TextEditingController ctrlDate = TextEditingController();
   TextEditingController ctrlTitle = TextEditingController();
@@ -75,6 +78,21 @@ class FormPageState extends State<FormPage> {
     );
   }
 
-  save() {}
+  getTextBox() {
+    page = (page != null) ? page : DiaryPage(diaryId: widget.diary!.id);
+    page!.title = ctrlTitle.text;
+    page!.content = ctrlContent.text;
+    page!.date = ctrlDate.text;
+  }
+
+  save() async {
+    getTextBox();
+    await page?.saveOrUpdate();
+
+    if(page != null) {
+      widget.voidCallBackParam(page);
+      Navigator.pop(context);
+    }
+  }
 
 }

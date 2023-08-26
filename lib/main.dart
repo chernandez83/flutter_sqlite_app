@@ -25,11 +25,11 @@ class MyApp extends StatelessWidget {
           body: Center(
             child: FutureBuilder<List<Diary>>(
               future: Diary().getDiaries(),
-              initialData: [],
+              initialData: const [],
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return (snapshot.connectionState == ConnectionState.done) ?
                 LockScreen(diaries: snapshot.data) :
-                CircularProgressIndicator();
+                const CircularProgressIndicator();
               },
             ),
           ),
